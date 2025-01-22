@@ -2,14 +2,7 @@ import java.util.Scanner;
 
 public class Clonky {
     public static void main(String[] args) {
-        String logo = """
-        _________ .__                 __           
-        \\_   ___ \\|  |   ____   ____ |  | _____.__.
-        /    \\  \\/|  |  /  _ \\ /    \\|  |/ <   |  |
-        \\     \\___|  |_(  <_> )   |  \\    < \\___  |
-         \\______  /____/\\____/|___|  /__|_ \\/ ____|
-                \\/                 \\/     \\/\\/     
-        """;
+        String logo = "\uD83C\uDF4E ⋆ \uD83C\uDF52  \uD83C\uDF80  \uD835\uDC9E\uD835\uDCC1\uD83C\uDF51\uD835\uDCC3\uD835\uDCC0\uD835\uDCCE  \uD83C\uDF80  \uD83C\uDF52 ⋆ \uD83C\uDF4E";
 
 
         System.out.println("Hello! I'm \n" + logo + "\nFEED ME");
