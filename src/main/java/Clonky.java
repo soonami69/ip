@@ -54,12 +54,18 @@ public class Clonky {
                     System.out.println(e.getMessage());
                 }
                 break;
+            case "hello":
+                System.out.println("Hi bby <3. What would you like to do today?");
+                break;
             case "mark":
                 taskManager.markTask(arguments);
                 break;
             case "unmark":
                 taskManager.unmarkTask(arguments);
                 break;
+            case "ANNIHILATE":
+                taskManager.removeTask(arguments);
+                // This is a deliberate fall through so that it will lists tasks after one is removed.
             case "list":
                 taskManager.listTasks();
                 break;

@@ -1,4 +1,8 @@
+Hello! I'm
+? ⋆ ?  ?  ??????  ?  ? ⋆ ?
+FEED ME
 ____________________________________________________________
+You: ____________________________________________________________
 New todo "borrow book" has been successfully eaten.
 Now I have 1 tasks in my tummy!
 ____________________________________________________________
@@ -12,3 +16,52 @@ New deadline "return book" has been successfully eaten.
 Now I have 2 tasks in my tummy!
 ____________________________________________________________
 You: ____________________________________________________________
+New event "project meeting" has been successfully eaten.
+Now I have 3 tasks in my tummy!
+____________________________________________________________
+You: ____________________________________________________________
+Here's what I've eaten so far:
+1.[T][ ] borrow book
+2.[D][ ] return book (by: Sunday)
+3.[E][ ] project meeting (from Mon 2pm to 4pm)
+FEED ME MORE!
+____________________________________________________________
+You: ____________________________________________________________
+Task borrow book successfully marked.
+[T][X] borrow book
+____________________________________________________________
+You: ____________________________________________________________
+Here's what I've eaten so far:
+1.[T][X] borrow book
+2.[D][ ] return book (by: Sunday)
+3.[E][ ] project meeting (from Mon 2pm to 4pm)
+FEED ME MORE!
+____________________________________________________________
+You: ____________________________________________________________
+*embraces you gently* Hey, you know that {remove} is not a recognized command, right?
+____________________________________________________________
+You: ____________________________________________________________
+*embraces you gently* Hey, you know that {remove} is not a recognized command, right?
+____________________________________________________________
+You: ____________________________________________________________
+Task successfully ANNIHILATED :3
+Here's what I've eaten so far:
+1.[T][X] borrow book
+2.[E][ ] project meeting (from Mon 2pm to 4pm)
+FEED ME MORE!
+____________________________________________________________
+You: ____________________________________________________________
+Please provide a number between 1 and 2!
+Here's what I've eaten so far:
+1.[T][X] borrow book
+2.[E][ ] project meeting (from Mon 2pm to 4pm)
+FEED ME MORE!
+____________________________________________________________
+You: ____________________________________________________________
+Here's what I've eaten so far:
+1.[T][X] borrow book
+2.[E][ ] project meeting (from Mon 2pm to 4pm)
+FEED ME MORE!
+____________________________________________________________
+You: ____________________________________________________________
+Go away!
