@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +31,15 @@ public class TaskManager {
         if (parts[1].trim().isEmpty()) {
             throw new NoByException();
         }
-        Deadline newDeadline = new Deadline(parts[0].trim(), parts[1].trim());
-        tasks.add(newDeadline);
-        System.out.printf("New deadline \"%s\" has been successfully eaten.\n", newDeadline.description);
-        saveTasks();
-        printTaskCount();
+        try {
+            Deadline newDeadline = new Deadline(parts[0].trim(), parts[1].trim());
+            tasks.add(newDeadline);
+            System.out.printf("New deadline \"%s\" has been successfully eaten.\n", newDeadline.description);
+            saveTasks();
+            printTaskCount();
+        } catch (DateTimeParseException e) {
+            System.out.println("Invalid date format! Try YYYY-MM-DD");
+        }
     }
 
     public void addEvent(String arguments) throws NoFromException, NoToException, NoDescriptionException {
@@ -49,11 +54,15 @@ public class TaskManager {
         if (timeParts[1].trim().isEmpty()) {
             throw new NoToException();
         }
-        Event newEvent = new Event(parts[0].trim(), timeParts[0].trim(), timeParts[1].trim());
-        tasks.add(newEvent);
-        System.out.printf("New event \"%s\" has been successfully eaten.\n", newEvent.description);
-        saveTasks();
-        printTaskCount();
+        try {
+            Event newEvent = new Event(parts[0].trim(), timeParts[0].trim(), timeParts[1].trim());
+            tasks.add(newEvent);
+            System.out.printf("New event \"%s\" has been successfully eaten.\n", newEvent.description);
+            saveTasks();
+            printTaskCount();
+        } catch (DateTimeParseException e){
+            System.out.println("Invalid date format! Try DD-MM-YYYY");
+        }
     }
 
     public void markTask(String argument) {
@@ -152,7 +161,7 @@ public class TaskManager {
             return true;
         } catch (IOException e){
             System.out.println("File could not be read!");
-        } catch (InvalidTaskFormatException e) {
+        } catch (InvalidTaskFormatException | DateTimeParseException e) {
             System.out.println(e.getMessage());
         }
         return false;

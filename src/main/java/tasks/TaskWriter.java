@@ -7,10 +7,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 class TaskWriter {
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy");
     public static void saveTasks(List<Task> tasks, String filePath) throws IOException {
         File file = new File(filePath);
         File parentFolder = file.getParentFile(); // Get parent directory
@@ -80,6 +83,8 @@ class TaskWriter {
         if (byIndex == -1) throw new InvalidTaskFormatException("Missing '(by: date)' in deadline task: " + line);
         String description = line.substring(7, byIndex).trim();
         String deadlineDate = line.substring(byIndex + 5, line.length() - 1).trim();
+        LocalDate date = LocalDate.parse(deadlineDate, formatter);
+        deadlineDate = date.toString();
         Deadline deadline = new Deadline(description, deadlineDate);
         if (isDone) {
             deadline.markAsDone();
@@ -96,6 +101,10 @@ class TaskWriter {
         if (toIndex == -1) throw new InvalidTaskFormatException("Missing 'to' in event task: " + line);
         String startDate = line.substring(fromIndex + 6, toIndex).trim();
         String endDate = line.substring(toIndex + 3, line.length() - 1).trim();
+        LocalDate date = LocalDate.parse(startDate, formatter);
+        startDate = date.toString();
+        date = LocalDate.parse(endDate, formatter);
+        endDate = date.toString();
         Event event = new Event(description, startDate, endDate);
         if (isDone) {
             event.markAsDone();
