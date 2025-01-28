@@ -1,3 +1,10 @@
+import tasks.NoByException;
+import tasks.NoDescriptionException;
+import tasks.NoFromException;
+import tasks.NoToException;
+import tasks.TaskManager;
+import tasks.UnknownCommandException;
+
 import java.util.Scanner;
 
 public class Clonky {
@@ -8,7 +15,12 @@ public class Clonky {
         String logo = "\uD83C\uDF4E ⋆ \uD83C\uDF52  \uD83C\uDF80  \uD835\uDC9E\uD835\uDCC1\uD83C\uDF51\uD835\uDCC3\uD835\uDCC0\uD835\uDCCE  \uD83C\uDF80  \uD83C\uDF52 ⋆ \uD83C\uDF4E";
         System.out.println("Hello! I'm \n" + logo + "\nFEED ME");
         System.out.println("____________________________________________________________");
-
+        System.out.println("Loading tasks...");
+        if (taskManager.loadTasks()) {
+            System.out.println("Tasks successfully dug up!!!");
+        } else {
+            System.out.println("Tasks could not be loaded... I'll just ignore it for now...");
+        }
         while (true) {
             System.out.print("You: ");
             String userInput = scanner.nextLine().trim();
@@ -33,44 +45,50 @@ public class Clonky {
         String arguments = parts.length > 1 ? parts[1] : "";
 
         switch (command) {
-            case "todo":
-                try {
-                    taskManager.addTodo(arguments);
-                } catch (NoDescriptionException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case "deadline":
-                try {
-                    taskManager.addDeadline(arguments);
-                } catch (NoDescriptionException | NoByException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case "event":
-                try {
-                    taskManager.addEvent(arguments);
-                } catch (NoDescriptionException | NoFromException | NoToException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case "hello":
-                System.out.println("Hi bby <3. What would you like to do today?");
-                break;
-            case "mark":
-                taskManager.markTask(arguments);
-                break;
-            case "unmark":
-                taskManager.unmarkTask(arguments);
-                break;
-            case "ANNIHILATE":
-                taskManager.removeTask(arguments);
-                // This is a deliberate fall through so that it will lists tasks after one is removed.
-            case "list":
-                taskManager.listTasks();
-                break;
-            default:
-                throw new UnknownCommandException(command);
+        case "todo":
+            try {
+                taskManager.addTodo(arguments);
+            } catch (NoDescriptionException e) {
+                System.out.println(e.getMessage());
+            }
+            break;
+        case "deadline":
+            try {
+                taskManager.addDeadline(arguments);
+            } catch (NoDescriptionException | NoByException e) {
+                System.out.println(e.getMessage());
+            }
+            break;
+        case "event":
+            try {
+                taskManager.addEvent(arguments);
+            } catch (NoDescriptionException | NoFromException | NoToException e) {
+                System.out.println(e.getMessage());
+            }
+            break;
+        case "hello":
+            System.out.println("Hi!. What would you like to do today?");
+            break;
+        case "save":
+            taskManager.saveTasks(arguments);
+            break;
+        case "load":
+            taskManager.loadTasks();
+            break;
+        case "mark":
+            taskManager.markTask(arguments);
+            break;
+        case "unmark":
+            taskManager.unmarkTask(arguments);
+            break;
+        case "ANNIHILATE":
+            taskManager.removeTask(arguments);
+            // This is a deliberate fall through so that it will lists tasks after one is removed.
+        case "list":
+            taskManager.listTasks();
+            break;
+        default:
+            throw new UnknownCommandException(command);
         }
     }
 }
