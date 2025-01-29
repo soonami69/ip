@@ -1,10 +1,8 @@
 package clonky.tasks;
 
 import java.io.IOException;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +65,7 @@ public class Parser {
             System.out.printf("New event \"%s\" has been successfully eaten.\n", newEvent.description);
             saveTasks();
             printTaskCount();
-        } catch (DateTimeParseException e){
+        } catch (DateTimeParseException e) {
             System.out.println("Invalid date format! Try DD-MM-YYYY");
         }
     }
@@ -165,7 +163,7 @@ public class Parser {
             tasks.clear();
             tasks.addAll(TaskWriter.LoadTasks(filePath));
             return true;
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("File could not be read!");
         } catch (InvalidTaskFormatException | DateTimeParseException e) {
             System.out.println(e.getMessage());
@@ -179,7 +177,7 @@ public class Parser {
             Path filePath = Paths.get("clonky", "tasks.txt");
             tasks.addAll(TaskWriter.LoadTasks(filePath.toString()));
             return true;
-        } catch (IOException e){
+        } catch (IOException e) {
             System.out.println("File could not be read!");
         } catch (InvalidTaskFormatException | DateTimeParseException e) {
             System.out.println(e.getMessage());

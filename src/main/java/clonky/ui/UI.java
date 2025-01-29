@@ -1,12 +1,18 @@
 package clonky.ui;
 
-import clonky.tasks.*;
+import clonky.tasks.NoByException;
+import clonky.tasks.NoDescriptionException;
+import clonky.tasks.NoFromException;
+import clonky.tasks.NoToException;
+import clonky.tasks.Parser;
+import clonky.tasks.UnknownCommandException;
 
 import java.util.Scanner;
 
 public class UI {
     private final Parser PARSER;
     private final Scanner scanner;
+
     public UI(Parser parser, Scanner scanner) {
         this.PARSER = parser;
         this.scanner = scanner;
@@ -43,6 +49,7 @@ public class UI {
             System.out.println("____________________________________________________________");
         }
     }
+
     private void handleCommand(String userInput) throws UnknownCommandException {
         String[] parts = userInput.split(" ", 2); // Split command and arguments
         String command = parts[0];
