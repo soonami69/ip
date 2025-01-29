@@ -9,15 +9,29 @@ import clonky.tasks.UnknownCommandException;
 
 import java.util.Scanner;
 
+/**
+ * Handles user interaction for the Clonky application.
+ * The UI class takes user input, processes commands, and interacts with the {@link Parser}.
+ */
 public class UI {
     private final Parser PARSER;
     private final Scanner scanner;
 
+    /**
+     * Constructs a new UI instance with a given parser and scanner.
+     *
+     * @param parser  The parser responsible for processing commands.
+     * @param scanner The scanner to read user input.
+     */
     public UI(Parser parser, Scanner scanner) {
         this.PARSER = parser;
         this.scanner = scanner;
     }
 
+    /**
+     * Starts the UI by displaying a welcome message and attempting to load saved tasks.
+     * After initialization, it enters the main user input loop.
+     */
     public void startup() {
         String logo = "\uD83C\uDF4E ⋆ \uD83C\uDF52  \uD83C\uDF80  \uD835\uDC9E\uD835\uDCC1\uD83C\uDF51\uD835\uDCC3\uD835\uDCC0\uD835\uDCCE  \uD83C\uDF80  \uD83C\uDF52 ⋆ \uD83C\uDF4E";
         System.out.println("Hello! I'm \n" + logo + "\nFEED ME");

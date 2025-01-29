@@ -153,6 +153,14 @@ class TaskWriter {
         if (fromIndex == -1)
             throw new InvalidTaskFormatException("Missing '(from: start to end)' in event task: " + line);
         String description = line.substring(7, fromIndex).trim();
+        Event event = getEvent(line, fromIndex, description);
+        if (isDone) {
+            event.markAsDone();
+        }
+        return event;
+    }
+
+    private static Event getEvent(String line, int fromIndex, String description) throws InvalidTaskFormatException {
         int toIndex = line.indexOf("to", fromIndex);
         if (toIndex == -1) throw new InvalidTaskFormatException("Missing 'to' in event task: " + line);
         String startDate = line.substring(fromIndex + 6, toIndex).trim();
@@ -162,9 +170,6 @@ class TaskWriter {
         date = LocalDate.parse(endDate, formatter);
         endDate = date.toString();
         Event event = new Event(description, startDate, endDate);
-        if (isDone) {
-            event.markAsDone();
-        }
         return event;
     }
 }

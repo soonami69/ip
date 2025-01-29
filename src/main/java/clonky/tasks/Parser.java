@@ -3,27 +3,29 @@ package clonky.tasks;
 import java.util.List;
 
 /**
- * The {@code Parser} class interprets user commands and interacts with the task list.
+ * The {@code Parser} class handles the parsing and execution of user commands
+ * related to task management in the Clonky application.
+ * It supports adding, removing, marking, and saving/loading tasks.
  */
 public class Parser {
     private final TaskList taskList = new TaskList();
 
     /**
-     * Adds a todo task by passing the description to the task list.
+     * Adds a new {@code Todo} task to the list.
      *
-     * @param description The description of the todo task.
-     * @throws NoDescriptionException If the description is empty.
+     * @param description The description of the to-do task.
+     * @throws NoDescriptionException If the description is empty or null.
      */
     public void addTodo(String description) throws NoDescriptionException {
         taskList.addTodo(description);
     }
 
     /**
-     * Adds a deadline task by passing the arguments to the task list.
+     * Adds a new {@code Deadline} task with a due date.
      *
-     * @param arguments The arguments containing the description and deadline.
-     * @throws NoDescriptionException If the description is empty.
-     * @throws NoByException         If the '/by' part is missing.
+     * @param arguments The task description and due date in the format "description /by YYYY-MM-DD".
+     * @throws NoDescriptionException If the description is missing.
+     * @throws NoByException If the due date is missing.
      */
     public void addDeadline(String arguments) throws NoDescriptionException, NoByException {
         taskList.addDeadline(arguments);
@@ -64,7 +66,7 @@ public class Parser {
     }
 
     /**
-     * Lists all tasks in the task list.
+     * Displays all tasks in the list.
      */
     public void listTasks() {
         taskList.listTasks();
