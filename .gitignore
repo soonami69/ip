@@ -17,4 +17,4 @@ bin/
 text-ui-test/EXPECTED-UNIX.TXT
 
 # clonky.Clonky save files
-clonky/
+/clonky/
