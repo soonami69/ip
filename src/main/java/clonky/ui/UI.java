@@ -92,6 +92,9 @@ public class UI {
         case "unmark":
             PARSER.unmarkTask(arguments);
             break;
+        case "find":
+            PARSER.find(arguments);
+            break;
         case "ANNIHILATE":
             PARSER.removeTask(arguments);
             // This is a deliberate fall through so that it will lists tasks after one is removed.

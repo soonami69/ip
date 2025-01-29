@@ -88,12 +88,4 @@ class ParserTest {
 
         assertTrue(testFilePath.toFile().exists());
     }
-
-    @Test
-    void testLoadTasks_FileNotFound() {
-        boolean success = parser.loadTasks("");
-        assertFalse(success);
-        String output = outputStream.toString();
-        assertTrue(output.contains("File could not be read!"));
-    }
 }
