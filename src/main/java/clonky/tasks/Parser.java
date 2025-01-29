@@ -9,9 +9,20 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@code Parser} class handles the parsing and execution of user commands
+ * related to task management in the Clonky application.
+ * It supports adding, removing, marking, and saving/loading tasks.
+ */
 public class Parser {
     private final List<Task> tasks = new ArrayList<>();
 
+    /**
+     * Adds a new {@code Todo} task to the list.
+     *
+     * @param description The description of the to-do task.
+     * @throws NoDescriptionException If the description is empty or null.
+     */
     public void addTodo(String description) throws NoDescriptionException {
         if (description == null || description.trim().isEmpty()) {
             throw new NoDescriptionException("Todo");
@@ -23,6 +34,13 @@ public class Parser {
         printTaskCount();
     }
 
+    /**
+     * Adds a new {@code Deadline} task with a due date.
+     *
+     * @param arguments The task description and due date in the format "description /by YYYY-MM-DD".
+     * @throws NoDescriptionException If the description is missing.
+     * @throws NoByException If the due date is missing.
+     */
     public void addDeadline(String arguments) throws NoDescriptionException, NoByException {
         String[] parts = arguments.split("/by", 2);
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
@@ -42,6 +60,15 @@ public class Parser {
         }
     }
 
+    /**
+     * Adds a new {@code Event} task with a start and end time.
+     *
+     * @param arguments The task description and time range in the format
+     *                  "description /from START /to END".
+     * @throws NoDescriptionException If the description is missing.
+     * @throws NoFromException If the start time is missing.
+     * @throws NoToException If the end time is missing.
+     */
     public void addEvent(String arguments) throws NoFromException, NoToException, NoDescriptionException {
         String[] parts = arguments.split("/from", 2);
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
@@ -72,6 +99,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Marks a task as complete.
+     *
+     * @param argument The task number to mark as done.
+     */
     public void markTask(String argument) {
         int index = parseIndex(argument);
         if (index == -1) return;
@@ -86,6 +118,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Unmarks a task, setting it back to incomplete.
+     *
+     * @param argument The task number to unmark.
+     */
     public void unmarkTask(String argument) {
         int index = parseIndex(argument);
         if (index == -1) return;
@@ -100,6 +137,9 @@ public class Parser {
         }
     }
 
+    /**
+     * Displays all tasks in the list.
+     */
     public void listTasks() {
         if (tasks.isEmpty()) {
             System.out.println("Nothing in my stomach. Feed me!");
@@ -130,6 +170,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Removes a task from the list.
+     *
+     * @param argument The task number to remove.
+     */
     public void removeTask(String argument) {
         int index = parseIndex(argument);
         if (index == -1) return;
@@ -138,6 +183,9 @@ public class Parser {
         System.out.println("Task successfully ANNIHILATED :3");
     }
 
+    /**
+     * Saves the current task list to a file.
+     */
     private void saveTasks() {
         Path filePath = Paths.get("clonky", "tasks.txt");
         String path = filePath.toString();
@@ -149,6 +197,11 @@ public class Parser {
         }
     }
 
+    /**
+     * Saves the current task list to a specified file.
+     *
+     * @param filePath The path of the file to save tasks.
+     */
     public void saveTasks(String filePath) {
         String path = (filePath == null || filePath.isEmpty()) ? "./clonky/tasks.txt" : filePath;
         try {
@@ -160,6 +213,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Loads tasks from a specified file.
+     *
+     * @param filePath The path of the file to load tasks from.
+     * @return {@code true} if tasks were successfully loaded, {@code false} otherwise.
+     */
     public boolean loadTasks(String filePath) {
         try {
             tasks.clear();
@@ -173,6 +232,11 @@ public class Parser {
         return false;
     }
 
+    /**
+     * Loads tasks from the default file location.
+     *
+     * @return {@code true} if tasks were successfully loaded, {@code false} otherwise.
+     */
     public boolean loadTasks() {
         try {
             tasks.clear();
