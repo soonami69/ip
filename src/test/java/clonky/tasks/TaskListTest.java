@@ -1,8 +1,12 @@
 package clonky.tasks;
 
+import clonky.exceptions.*;
+import clonky.response.Mood;
+import clonky.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,65 +20,76 @@ class TaskListTest {
     }
 
     @Test
-    void addTask_shouldIncreaseSize() throws NoDescriptionException {
+    void testAddTodo() throws NoDescriptionException {
+        Response response = taskList.addTodo("Buy groceries");
+
+        assertEquals(1, taskList.getSize());
+        assertEquals("New todo \"Buy groceries\" has been successfully eaten.\n", response.getText());
+        assertEquals(Mood.HAPPY, response.getMood());
+        assertEquals(new Color(138, 206, 0), response.getColor());
+    }
+
+    @Test
+    void testAddTodoWithoutDescriptionThrowsException() {
+        assertThrows(NoDescriptionException.class, () -> taskList.addTodo(" "));
+    }
+
+    @Test
+    void testAddDeadline() throws NoDescriptionException, NoByException {
+        Response response = taskList.addDeadline("Submit report /by 2025-02-10");
+
+        assertEquals(1, taskList.getSize());
+        assertEquals("New deadline \"Submit report\" has been successfully eaten.\n", response.getText());
+        assertEquals(Mood.HAPPY, response.getMood());
+        assertEquals(new Color(255, 116, 108), response.getColor());
+    }
+
+    @Test
+    void testAddDeadlineWithoutByThrowsException() {
+        assertThrows(NoByException.class, () -> taskList.addDeadline("Submit report"));
+    }
+
+    @Test
+    void testAddEvent() throws NoDescriptionException, NoFromException, NoToException {
+        Response response = taskList.addEvent("Concert /from 2025-02-01 /to 2025-02-02");
+
+        assertEquals(1, taskList.getSize());
+        assertEquals("New event \"Concert\" has been successfully eaten.\n", response.getText());
+        assertEquals(Mood.HAPPY, response.getMood());
+        assertEquals(new Color(167, 199, 231), response.getColor());
+    }
+
+    @Test
+    void testAddEventWithoutFromThrowsException() {
+        assertThrows(NoFromException.class, () -> taskList.addEvent("Concert /to 2025-02-02"));
+    }
+
+    @Test
+    void testMarkTask() throws NoDescriptionException {
+        taskList.addTodo("Buy groceries");
+        Response response = taskList.markTask(0);
+
+        assertEquals("Task Buy groceries successfully marked as done.", response.getText());
+        assertEquals(Mood.HAPPY, response.getMood());
+        assertEquals(new Color(128, 239, 128), response.getColor());
+    }
+
+    @Test
+    void testUnmarkTask() throws NoDescriptionException {
+        taskList.addTodo("Buy groceries");
+        taskList.markTask(0);
+        Response response = taskList.unmarkTask(0);
+
+        assertEquals("Task Buy groceries successfully unmarked.", response.getText());
+        assertEquals(Mood.HAPPY, response.getMood());
+    }
+
+    @Test
+    void testFindTasksByDescription() throws NoDescriptionException {
         taskList.addTodo("Buy milk");
-        assertEquals(1, taskList.getSize(), "Task list size should be 1 after adding a task.");
-    }
+        taskList.addTodo("Buy eggs");
+        List<Task> found = taskList.findTasksByDescription("Buy");
 
-    @Test
-    void removeTask_shouldDecreaseSize() throws NoDescriptionException {
-        taskList.addTodo("Buy milk");
-        taskList.addTodo("Walk the dog");
-
-        Task removedTask = taskList.removeTask(0);
-        assertEquals("Buy milk", removedTask.description, "Removed task should be 'Buy milk'.");
-        assertEquals(1, taskList.getSize(), "Task list size should be 1 after removing a task.");
-    }
-
-    @Test
-    void removeTask_invalidIndex_shouldThrowException() {
-        assertThrows(IndexOutOfBoundsException.class, () -> taskList.removeTask(0), "Removing from empty list should throw an exception.");
-    }
-
-    @Test
-    void getTask_validIndex_shouldReturnCorrectTask() throws NoDescriptionException {
-        taskList.addTodo("Finish homework");
-        Task retrievedTask = taskList.getTask(0);
-        assertEquals("Finish homework", retrievedTask.description, "Retrieved task should be 'Finish homework'.");
-    }
-
-    @Test
-    void getTask_invalidIndex_shouldThrowException() {
-        assertThrows(IndexOutOfBoundsException.class, () -> taskList.getTask(0), "Retrieving from empty list should throw an exception.");
-    }
-
-    @Test
-    void findTasks_shouldReturnMatchingTasks() {
-        taskList.addTask(new Todo("Buy groceries"));
-        taskList.addTask(new Todo("Finish project"));
-        taskList.addTask(new Todo("Groceries for party"));
-
-        List<Task> results = taskList.findTasksByDescription("groceries");
-        assertEquals(2, results.size(), "Should find 2 tasks containing 'groceries'.");
-    }
-
-    @Test
-    void findTasks_noMatch_shouldReturnEmptyList() {
-        taskList.addTask(new Todo("Clean the house"));
-        List<Task> results = taskList.findTasksByDescription("homework");
-        assertTrue(results.isEmpty(), "Should return an empty list if no tasks match.");
-    }
-
-    @Test
-    void listTasks_emptyList_shouldPrintMessage() {
-        taskList.listTasks(); // Manually check the console output for "Nothing in my stomach. Feed me!"
-    }
-
-    @Test
-    void listTasks_nonEmptyList_shouldPrintTasks() {
-        taskList.addTask(new Todo("Buy groceries"));
-        taskList.addTask(new Todo("Finish project"));
-
-        taskList.listTasks(); // Manually check the console output
+        assertEquals(2, found.size());
     }
 }

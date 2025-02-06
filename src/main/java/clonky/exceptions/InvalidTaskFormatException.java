@@ -1,6 +1,6 @@
-package clonky.tasks;
+package clonky.exceptions;
 
-class InvalidTaskFormatException extends Exception {
+public class InvalidTaskFormatException extends Exception {
     public InvalidTaskFormatException(String message) {
         super(message);
     }

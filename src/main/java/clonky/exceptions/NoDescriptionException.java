@@ -1,4 +1,4 @@
-package clonky.tasks;
+package clonky.exceptions;
 
 public class NoDescriptionException extends Exception {
     public NoDescriptionException(String errorMessage) {

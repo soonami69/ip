@@ -1,4 +1,4 @@
-package clonky.tasks;
+package clonky.exceptions;
 
 public class UnknownCommandException extends Exception {
     public UnknownCommandException(String errorMessage) {

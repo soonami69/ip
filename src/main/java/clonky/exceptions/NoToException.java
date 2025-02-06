@@ -1,4 +1,4 @@
-package clonky.tasks;
+package clonky.exceptions;
 
 public class NoToException extends Exception {
     public NoToException() {

@@ -1,5 +1,14 @@
 package clonky.tasks;
 
+import clonky.exceptions.InvalidTaskFormatException;
+import clonky.exceptions.NoByException;
+import clonky.exceptions.NoDescriptionException;
+import clonky.exceptions.NoFromException;
+import clonky.exceptions.NoToException;
+import clonky.response.Mood;
+import clonky.response.Response;
+
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,13 +30,17 @@ public class TaskList {
      * @param description The description of the todo task.
      * @throws NoDescriptionException If the description is empty.
      */
-    public void addTodo(String description) throws NoDescriptionException {
+    public Response addTodo(String description) throws NoDescriptionException {
         if (description == null || description.trim().isEmpty()) {
             throw new NoDescriptionException("Todo");
         }
         Todo newTodo = new Todo(description.trim());
         tasks.add(newTodo);
-        System.out.printf("New todo \"%s\" has been successfully eaten.\n", newTodo.description);
+        String text = String.format("New todo \"%s\" has been successfully eaten.\n", newTodo.description);
+        Mood mood = Mood.HAPPY;
+        Color color = new Color(138, 206, 0);
+        saveTasks("");
+        return new Response(text, mood, color);
     }
 
     /**
@@ -37,7 +50,7 @@ public class TaskList {
      * @throws NoDescriptionException If the description is empty.
      * @throws NoByException         If the '/by' part is missing.
      */
-    public void addDeadline(String arguments) throws NoDescriptionException, NoByException {
+    public Response addDeadline(String arguments) throws NoDescriptionException, NoByException {
         String[] parts = arguments.split("/by", 2);
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
             if (parts[0].trim().isEmpty()) {
@@ -47,7 +60,11 @@ public class TaskList {
         }
         Deadline newDeadline = new Deadline(parts[0].trim(), parts[1].trim());
         tasks.add(newDeadline);
-        System.out.printf("New deadline \"%s\" has been successfully eaten.\n", newDeadline.description);
+        String text = String.format("New deadline \"%s\" has been successfully eaten.\n", newDeadline.description);
+        Mood mood = Mood.HAPPY;
+        Color color = new Color(255, 116, 108);
+        saveTasks("");
+        return new Response(text, mood, color);
     }
 
     /**
@@ -58,7 +75,7 @@ public class TaskList {
      * @throws NoFromException       If the '/from' part is missing.
      * @throws NoToException         If the '/to' part is missing.
      */
-    public void addEvent(String arguments) throws NoDescriptionException, NoFromException, NoToException {
+    public Response addEvent(String arguments) throws NoDescriptionException, NoFromException, NoToException {
         String[] parts = arguments.split("/from", 2);
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
             if (parts[0].trim().isEmpty()) {
@@ -78,7 +95,11 @@ public class TaskList {
 
         Event newEvent = new Event(parts[0].trim(), timeParts[0].trim(), timeParts[1].trim());
         tasks.add(newEvent);
-        System.out.printf("New event \"%s\" has been successfully eaten.\n", newEvent.description);
+        String text = String.format("New event \"%s\" has been successfully eaten.\n", newEvent.description);
+        Mood mood = Mood.HAPPY;
+        Color color = new Color(167, 199, 231);
+        saveTasks("");
+        return new Response(text, mood, color);
     }
 
     /**
@@ -86,15 +107,23 @@ public class TaskList {
      *
      * @param index The index of the task to mark as done.
      */
-    public void markTask(int index) {
+    public Response markTask(int index) {
+        String text = "";
+        Mood mood = Mood.HAPPY;
+        Color color = new Color(128, 239, 128);
         if (index >= 0 && index < tasks.size()) {
             if (tasks.get(index).isDone) {
-                System.out.println("Task already complete!");
+                text = "Task already complete!";
+                mood = Mood.SAD;
+                color = new Color(255, 105, 97);
             } else {
                 tasks.get(index).markAsDone();
-                System.out.println("Task " + tasks.get(index).description + " successfully marked as done.");
+                text = String.format("Task " + tasks.get(index).description
+                        + " successfully marked as done.");
+                saveTasks("");
             }
         }
+        return new Response(text, mood, color);
     }
 
     /**
@@ -102,32 +131,41 @@ public class TaskList {
      *
      * @param index The index of the task to unmark.
      */
-    public void unmarkTask(int index) {
+    public Response unmarkTask(int index) {
+        String text = "";
+        Mood mood = Mood.HAPPY;
+        Color color = new Color(128, 239, 128);
         if (index >= 0 && index < tasks.size()) {
             if (!tasks.get(index).isDone) {
-                System.out.println("Task already incomplete!");
+                text = "Task already incomplete!";
+                mood = Mood.SAD;
+                color = new Color(255, 105, 97);
             } else {
                 tasks.get(index).markAsUndone();
-                System.out.println("Task " + tasks.get(index).description + " successfully unmarked.");
+                text = "Task " + tasks.get(index).description + " successfully unmarked.";
+                saveTasks("");
             }
         }
+        return new Response(text, mood, color);
     }
 
     /**
      * Lists all tasks in the task list.
      */
-    public void listTasks() {
+    public Response listTasks() {
+        StringBuilder text = new StringBuilder();
+        Mood mood = Mood.HAPPY;
+        String color = "";
         if (tasks.isEmpty()) {
-            System.out.println("Nothing in my stomach. Feed me!");
-            return;
+            text = new StringBuilder("Nothing in my stomach. Feed me!");
+            mood = Mood.ANGRY;
+            return new Response(text.toString(), mood, new Color(128, 239, 128));
         }
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
+            String taskString = (i + 1) + ". " + tasks.get(i) + "\n";
+            text.append(taskString);
         }
-    }
-
-    public void addTask(Task task) {
-        tasks.add(task);
+        return new Response(text.toString(), mood, new Color(179, 235, 242));
     }
 
     /**
@@ -135,14 +173,20 @@ public class TaskList {
      *
      * @param index The index of the task to be removed.
      */
-    public Task removeTask(int index) throws IndexOutOfBoundsException {
+    public Response removeTask(int index) throws IndexOutOfBoundsException {
+        String text = "";
+        Mood mood;
         if (index >= 0 && index < tasks.size()) {
             Task removed = tasks.get(index);
             tasks.remove(index);
-            System.out.println("Task successfully removed.");
-            return removed;
+            text = "Task successfully removed.\n" + removed.toString();
+            mood = Mood.HAPPY;
+            saveTasks("");
+            return new Response(text, mood, new Color(128, 239,128));
         } else {
-            throw new IndexOutOfBoundsException("Can't find task of " + index);
+            text = "Can't find task of " + index;
+            mood = Mood.ANGRY;
+            return new Response(text, mood, new Color(255, 116, 108));
         }
     }
 
@@ -162,30 +206,51 @@ public class TaskList {
         return this.tasks.get(index);
     }
 
-    public boolean loadTasks() {
+    public Response loadTasks() {
+        String text;
+        Mood mood;
+        Color color;
         try {
             tasks.clear();
             Path filePath = Paths.get("clonky", "tasks.txt");
             tasks.addAll(TaskWriter.LoadTasks(filePath.toString()));
-            return true;
+            text = "Tasks loaded successfully!!!!";
+            mood = Mood.HAPPY;
+            color = new Color(179, 235, 242);
+            return new Response(text, mood, color);
         } catch (IOException e) {
-            System.out.println("File could not be read!");
+            text = "File could not be read!";
+            mood = Mood.SAD;
+            color = new Color(255, 116, 108);
+            return new Response(text, mood, color);
         } catch (InvalidTaskFormatException | DateTimeParseException e) {
-            System.out.println(e.getMessage());
+            text = e.getMessage();
+            mood = Mood.ANGRY;
+            color = Color.red;
+            return new Response(text, mood, color);
         }
-        return false;
     }
 
-    public void saveTasks(String filePath) {
+    public Response saveTasks(String filePath) {
+        String text = "";
+        Mood mood;
+        Color color;
         String path = (filePath == null || filePath.isEmpty())
                 ? Paths.get("clonky", "tasks.txt").toString()
                 : filePath;
         try {
             TaskWriter.saveTasks(tasks, path);
-            System.out.printf("Tasks successfully saved at %s, Yippee!!!! >o<\n", path);
+            text = String.format("Tasks successfully saved at %s, Yippee!!!! >o<\n", path);
+            mood = Mood.HAPPY;
+            color = Color.green;
+            return new Response(text, mood, color);
         } catch (IOException e) {
             // Handle exception (log, retry, etc.)
-            System.err.println("Error occurred while saving tasks: " + e.getMessage());
+            text = "Error occurred while saving tasks: " + e.getMessage() + "\n";
+            mood = Mood.SAD;
+            color = Color.red;
+            System.err.println(text);
+            return new Response(text, mood, color);
         }
     }
 

@@ -1,39 +1,60 @@
-    package clonky;
+package clonky;
 
-    import clonky.tasks.Parser;
-    import clonky.ui.UI;
+import clonky.gui.MainWindow;
+import clonky.handler.Handler;
+import clonky.tasks.Parser;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-    import java.util.Scanner;
+import java.io.IOException;
+import java.util.Scanner;
+
+/**
+ * The main entry point for the Clonky application.
+ * Clonky is a task manager that supports different types of tasks and user interactions.
+ */
+public class Clonky extends Application {
+    private Handler handler;
+    private ScrollPane scrollPane;
+    private VBox dialogContainer;
+    private TextField userInput;
+    private Button sendButton;
+    private Scene scene;
+
     /**
-     * The main entry point for the Clonky application.
-     * Clonky is a task manager that supports different types of tasks and user interactions.
+     * Initializes Clonky with a specified file path for saving/loading tasks. Currently the
+     * File path is hard-coded.
      */
-    public class Clonky {
-        private UI ui;
-        /**
-         * Initializes Clonky with a specified file path for saving/loading tasks. Currently the
-         * File path is hard-coded.
-         *
-         * @param filePath The path where tasks are stored. (Currently not used in initialization)
-         */
-        public Clonky(String filePath) {
-            //TODO: Let filepath be configurable...
-            ui = new UI(new Parser(), new Scanner(System.in));
-        }
+    public Clonky() {
+        //TODO: Let filepath be configurable...
+        handler = new Handler(new Parser(), new Scanner(System.in));
+    }
 
-        /**
-         * Starts the Clonky task manager by invoking the UI.
-         */
-        public void run() {
-            ui.startup();
-        }
-
-        /**
-         * The main method, which starts the Clonky application.
-         *
-         * @param args Command-line arguments (not currently used)
-         */
-        public static void main(String[] args) {
-            new Clonky("This isn't working yet").run();
+    @Override
+    public void start(Stage stage) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Clonky.class.getResource("/clonky/gui/MainWindow.fxml"));
+            AnchorPane ap = fxmlLoader.load();
+            Scene scene = new Scene(ap);
+            stage.setTitle("Clonky");
+            stage.getIcons().add( new Image(
+                    Clonky.class.getResourceAsStream("/images/clonkyHappy.jpg")));
+            stage.setScene(scene);
+            stage.setMinHeight(220);
+            stage.setMinWidth(417);
+            fxmlLoader.<MainWindow>getController().setHandler(handler);  // inject the Handler
+            fxmlLoader.<MainWindow>getController().welcome(); // say hi and load tasks
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+}
