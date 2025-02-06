@@ -1,5 +1,8 @@
 package clonky;
 
+import java.io.IOException;
+import java.util.Scanner;
+
 import clonky.gui.MainWindow;
 import clonky.handler.Handler;
 import clonky.tasks.Parser;
@@ -13,9 +16,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * The main entry point for the Clonky application.
@@ -45,12 +45,12 @@ public class Clonky extends Application {
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setTitle("Clonky");
-            stage.getIcons().add( new Image(
+            stage.getIcons().add(new Image(
                     Clonky.class.getResourceAsStream("/images/clonkyHappy.jpg")));
             stage.setScene(scene);
             stage.setMinHeight(220);
             stage.setMinWidth(417);
-            fxmlLoader.<MainWindow>getController().setHandler(handler);  // inject the Handler
+            fxmlLoader.<MainWindow>getController().setHandler(handler); // inject the Handler
             fxmlLoader.<MainWindow>getController().welcome(); // say hi and load tasks
             stage.show();
         } catch (IOException e) {

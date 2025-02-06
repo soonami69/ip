@@ -1,14 +1,6 @@
 package clonky.tasks;
 
-import clonky.exceptions.InvalidTaskFormatException;
-import clonky.exceptions.NoByException;
-import clonky.exceptions.NoDescriptionException;
-import clonky.exceptions.NoFromException;
-import clonky.exceptions.NoToException;
-import clonky.response.Mood;
-import clonky.response.Response;
-
-import java.awt.*;
+import java.awt.Color;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,6 +8,14 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import clonky.exceptions.InvalidTaskFormatException;
+import clonky.exceptions.NoByException;
+import clonky.exceptions.NoDescriptionException;
+import clonky.exceptions.NoFromException;
+import clonky.exceptions.NoToException;
+import clonky.response.Mood;
+import clonky.response.Response;
 
 /**
  * The {@code TaskList} class manages a collection of tasks and provides methods
@@ -182,7 +182,7 @@ public class TaskList {
             text = "Task successfully removed.\n" + removed.toString();
             mood = Mood.HAPPY;
             saveTasks("");
-            return new Response(text, mood, new Color(128, 239,128));
+            return new Response(text, mood, new Color(128, 239, 128));
         } else {
             text = "Can't find task of " + index;
             mood = Mood.ANGRY;
@@ -206,6 +206,11 @@ public class TaskList {
         return this.tasks.get(index);
     }
 
+    /**
+     * Load tasks from /clonky/tasks.txt.
+     * @return A Response that contains text that says if the loading has been successful
+     *      or not.
+     */
     public Response loadTasks() {
         String text;
         Mood mood;
@@ -213,7 +218,7 @@ public class TaskList {
         try {
             tasks.clear();
             Path filePath = Paths.get("clonky", "tasks.txt");
-            tasks.addAll(TaskWriter.LoadTasks(filePath.toString()));
+            tasks.addAll(TaskWriter.loadTasks(filePath.toString()));
             text = "Tasks loaded successfully!!!!";
             mood = Mood.HAPPY;
             color = new Color(179, 235, 242);
@@ -231,6 +236,11 @@ public class TaskList {
         }
     }
 
+    /**
+     * Saves tasks to a certain filePath, or /clonky/tasks.txt if none is provided.
+     * @param filePath The file path to save to.
+     * @return A response detailing if the operation was successful or not.
+     */
     public Response saveTasks(String filePath) {
         String text = "";
         Mood mood;

@@ -1,16 +1,16 @@
 package clonky.handler;
 
-import clonky.response.Mood;
-import clonky.response.Response;
-import clonky.tasks.TestParser;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Scanner;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import clonky.response.Mood;
+import clonky.response.Response;
+import clonky.tasks.TestParser;
 
 class HandlerTest {
     private Handler handler;

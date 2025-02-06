@@ -1,6 +1,6 @@
 package clonky.response;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.Random;
 
 /**
@@ -13,7 +13,12 @@ public class Response {
     private final Mood mood;
     private final Color color;
 
-
+    /**
+     * A class that encapsulates a response from Clonky.
+     * @param text The text that Clonky has to say.
+     * @param mood Clonky's mood.
+     * @param color A color that the text book is to be displayed
+     */
     public Response(String text, Mood mood, Color color) {
         this.text = text;
         this.mood = mood;
@@ -53,8 +58,9 @@ public class Response {
             return Color.yellow;
         case CHAOTIC:
             return new Color(RANDOM.nextFloat(), RANDOM.nextFloat(), RANDOM.nextFloat());
+        default:
+            return null;
         }
-        return null;
     }
 
     public static String getImageFromMood(Mood mood) {
@@ -67,7 +73,8 @@ public class Response {
             return "/images/clonkyHappy.jpg";
         case CHAOTIC:
             return "/images/clonkyChaotic.jpg";
+        default:
+            return null;
         }
-        return null;
     }
 }

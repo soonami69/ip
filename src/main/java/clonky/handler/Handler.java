@@ -1,17 +1,17 @@
 package clonky.handler;
 
+import java.awt.Color;
+import java.time.format.DateTimeParseException;
+import java.util.Scanner;
+
 import clonky.exceptions.NoByException;
 import clonky.exceptions.NoDescriptionException;
 import clonky.exceptions.NoFromException;
 import clonky.exceptions.NoToException;
+import clonky.exceptions.UnknownCommandException;
 import clonky.response.Mood;
 import clonky.response.Response;
 import clonky.tasks.Parser;
-import clonky.exceptions.UnknownCommandException;
-
-import java.awt.*;
-import java.time.format.DateTimeParseException;
-import java.util.Scanner;
 
 /**
  * Handles user interaction for the Clonky application.
@@ -77,7 +77,7 @@ public class Handler {
                 return parser.addEvent(arguments);
             } catch (NoDescriptionException | NoFromException | NoToException e) {
                 return new Response(e.getMessage(), Mood.SAD, new Color(255, 116, 108));
-            }  catch (DateTimeParseException e) {
+            } catch (DateTimeParseException e) {
                 return new Response("Please provide a date in the format YYYY-MM-DD", Mood.SAD, Color.RED);
             }
         case "hello":
@@ -99,6 +99,7 @@ public class Handler {
             return parser.listTasks();
         case "bye":
             javafx.application.Platform.exit();
+            return null;
         default:
             throw new UnknownCommandException(command);
         }

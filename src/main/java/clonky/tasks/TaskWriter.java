@@ -1,7 +1,5 @@
 package clonky.tasks;
 
-import clonky.exceptions.InvalidTaskFormatException;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,6 +10,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import clonky.exceptions.InvalidTaskFormatException;
 
 /**
  * The {@code TaskWriter} class provides utility methods for saving and loading tasks to and from a file.
@@ -57,7 +57,7 @@ class TaskWriter {
      * @throws IOException                If an error occurs while reading the file.
      * @throws InvalidTaskFormatException If the file contains an unrecognized task format.
      */
-    public static List<Task> LoadTasks(String filePath) throws IOException, InvalidTaskFormatException {
+    public static List<Task> loadTasks(String filePath) throws IOException, InvalidTaskFormatException {
         List<Task> tasks = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -130,7 +130,9 @@ class TaskWriter {
     private static Deadline parseDeadlineTask(String line) throws InvalidTaskFormatException {
         boolean isDone = isTaskDone(line);
         int byIndex = line.indexOf("(by: ");
-        if (byIndex == -1) throw new InvalidTaskFormatException("Missing '(by: date)' in deadline task: " + line);
+        if (byIndex == -1) {
+            throw new InvalidTaskFormatException("Missing '(by: date)' in deadline task: " + line);
+        }
         String description = line.substring(7, byIndex).trim();
         String deadlineDate = line.substring(byIndex + 5, line.length() - 1).trim();
         LocalDate date = LocalDate.parse(deadlineDate, formatter);
@@ -152,8 +154,9 @@ class TaskWriter {
     private static Event parseEventTask(String line) throws InvalidTaskFormatException {
         boolean isDone = isTaskDone(line);
         int fromIndex = line.indexOf("(from ");
-        if (fromIndex == -1)
+        if (fromIndex == -1) {
             throw new InvalidTaskFormatException("Missing '(from: start to end)' in event task: " + line);
+        }
         String description = line.substring(7, fromIndex).trim();
         Event event = getEvent(line, fromIndex, description);
         if (isDone) {
@@ -164,7 +167,9 @@ class TaskWriter {
 
     private static Event getEvent(String line, int fromIndex, String description) throws InvalidTaskFormatException {
         int toIndex = line.indexOf("to", fromIndex);
-        if (toIndex == -1) throw new InvalidTaskFormatException("Missing 'to' in event task: " + line);
+        if (toIndex == -1) {
+            throw new InvalidTaskFormatException("Missing 'to' in event task: " + line);
+        }
         String startDate = line.substring(fromIndex + 6, toIndex).trim();
         String endDate = line.substring(toIndex + 3, line.length() - 1).trim();
         LocalDate date = LocalDate.parse(startDate, formatter);

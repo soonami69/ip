@@ -1,14 +1,14 @@
 package clonky.tasks;
 
+import java.awt.Color;
+import java.util.List;
+
 import clonky.exceptions.NoByException;
 import clonky.exceptions.NoDescriptionException;
 import clonky.exceptions.NoFromException;
 import clonky.exceptions.NoToException;
 import clonky.response.Mood;
 import clonky.response.Response;
-
-import java.awt.*;
-import java.util.List;
 
 /**
  * The {@code Parser} class handles the parsing and execution of user commands
@@ -146,8 +146,8 @@ public class Parser {
             text.append("Yea, I wish I had time too...\n");
             break;
         default:
-            text.append("I don't quite understand that. Use " +
-                    "find desc {query} to search for tasks by description");
+            text.append("I don't quite understand that. Use "
+                    + "find desc {query} to search for tasks by description");
         }
         return new Response(text.toString(), Mood.HAPPY,
                 new Color(245, 208, 51));
@@ -166,8 +166,8 @@ public class Parser {
      * @return A Response containing the welcome message
      */
     public Response welcome() {
-        return new Response("Welcome! I'm clonky... I think," +
-                " and I'm here to help!", Mood.CHAOTIC, new Color(231, 210, 124));
+        return new Response("Welcome! I'm clonky... I think,"
+                + " and I'm here to help!", Mood.CHAOTIC, new Color(231, 210, 124));
     }
 
 

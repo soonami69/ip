@@ -1,9 +1,12 @@
 package clonky.response;
 
-import org.junit.jupiter.api.Test;
-import java.awt.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.awt.Color;
+
+import org.junit.jupiter.api.Test;
 
 class ResponseTest {
 
@@ -34,7 +37,7 @@ class ResponseTest {
     }
 
     @Test
-    void testGetColorFromMood_ChaoticRandomness() {
+    void testGetColorFromMoodChaotic() {
         Color color1 = Response.getColorFromMood(Mood.CHAOTIC);
         Color color2 = Response.getColorFromMood(Mood.CHAOTIC);
         // Random colors should not always be equal

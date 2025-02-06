@@ -1,5 +1,8 @@
 package clonky.gui;
 
+import java.awt.Color;
+import java.io.IOException;
+
 import clonky.response.Response;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,19 +16,23 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
 
-import java.awt.*;
-import java.io.IOException;
-
+/**
+ * The Controller class for the Dialog Box UI element.
+ * Takes in Responses and displays the Text, Mood and Color.
+ */
 public class DialogBox extends HBox {
-
+    private static MainWindow mainWindow; // instance of mainWindow to load images from
+    private static Image userImage;
     @FXML
     private Label dialog;
     @FXML
     private ImageView displayPicture;
-    private static MainWindow mainWindow; // instance of mainWindow to load images from
 
-    private static Image userImage;
-
+    /**
+     * Initializes the Dialogue Box
+     * @param r The response to be displayed
+     * @param i The Image to be displayed
+     */
     public DialogBox(Response r, Image i) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource(
@@ -37,8 +44,8 @@ public class DialogBox extends HBox {
             e.printStackTrace();
         }
         String moodColorString = colorToString(Response.getColorFromMood(r.getMood()));
-        dialog.setStyle(String.format("-fx-background-color: linear-gradient(to bottom right, %s, %s" +
-                        "); -fx-border-color: %s", colorToString(r.getColor()),
+        dialog.setStyle(String.format("-fx-background-color: linear-gradient(to bottom right, %s, %s"
+                        + "); -fx-border-color: %s", colorToString(r.getColor()),
                 colorToString(r.getColor().brighter()),
                 moodColorString));
         dialog.setText(r.getText());
@@ -74,7 +81,7 @@ public class DialogBox extends HBox {
 
     public static void setMainWindow(MainWindow mw) {
         DialogBox.mainWindow = mw;
-        userImage = new Image(mw.getClass().getResourceAsStream("/images/userProfile" +
-                ".png"));
+        userImage = new Image(mw.getClass().getResourceAsStream("/images/userProfile"
+                + ".png"));
     }
 }

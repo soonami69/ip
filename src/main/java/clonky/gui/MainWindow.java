@@ -1,5 +1,7 @@
 package clonky.gui;
 
+import java.awt.Color;
+
 import clonky.handler.Handler;
 import clonky.response.Mood;
 import clonky.response.Response;
@@ -7,11 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-
-import java.awt.*;
 
 /**
  * Controller for the main GUI.
@@ -27,6 +26,7 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Handler handler;
+
     @FXML
     public void initialize() {
         DialogBox.setMainWindow(this);

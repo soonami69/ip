@@ -1,15 +1,20 @@
 package clonky.tasks;
 
-import clonky.exceptions.*;
-import clonky.response.Mood;
-import clonky.response.Response;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.awt.Color;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import clonky.exceptions.NoByException;
+import clonky.exceptions.NoDescriptionException;
+import clonky.exceptions.NoFromException;
+import clonky.exceptions.NoToException;
+import clonky.response.Mood;
+import clonky.response.Response;
 
 class TaskListTest {
     private TaskList taskList;
