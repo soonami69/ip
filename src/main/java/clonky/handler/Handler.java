@@ -99,7 +99,7 @@ public class Handler {
             return parser.listTasks();
         case "bye":
             javafx.application.Platform.exit();
-            return null;
+            return new Response("Bye!", Mood.SAD, new Color(108, 116, 255));
         default:
             throw new UnknownCommandException(command);
         }
