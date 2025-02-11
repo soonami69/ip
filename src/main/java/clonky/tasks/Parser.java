@@ -127,6 +127,8 @@ public class Parser {
      * @return A Response whose list of tasks that match the description.
      */
     public Response find(String description) {
+        assert description != null;
+
         StringBuilder text = new StringBuilder();
         String[] parts = description.split(" ", 2); // Split command and arguments
         String command = parts[0];
@@ -172,6 +174,7 @@ public class Parser {
 
 
     public Response saveTasks(String arguments) {
+        assert arguments != null;
         return taskList.saveTasks(arguments);
     }
 }

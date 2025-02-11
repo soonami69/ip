@@ -9,12 +9,8 @@ import clonky.tasks.Parser;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -23,11 +19,6 @@ import javafx.stage.Stage;
  */
 public class Clonky extends Application {
     private Handler handler;
-    private ScrollPane scrollPane;
-    private VBox dialogContainer;
-    private TextField userInput;
-    private Button sendButton;
-    private Scene scene;
 
     /**
      * Initializes Clonky with a specified file path for saving/loading tasks. Currently the

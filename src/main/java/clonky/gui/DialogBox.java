@@ -34,6 +34,9 @@ public class DialogBox extends HBox {
      * @param i The Image to be displayed
      */
     public DialogBox(Response r, Image i) {
+        assert r != null;
+        assert i != null;
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource(
                     "/clonky/gui/DialogBox.fxml"));
@@ -64,10 +67,12 @@ public class DialogBox extends HBox {
     }
 
     public static DialogBox getUserDialog(Response r) {
+        assert r != null;
         return new DialogBox(r, userImage);
     }
 
     public static DialogBox getClonkyDialog(Response r) {
+        assert r != null;
         Image i = new Image(mainWindow.getClass().getResourceAsStream(
                 Response.getImageFromMood(r.getMood())));
         var db = new DialogBox(r, i);

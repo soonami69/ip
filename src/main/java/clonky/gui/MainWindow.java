@@ -37,6 +37,7 @@ public class MainWindow extends AnchorPane {
      * Configures the handler to handle inputs
      */
     public void setHandler(Handler h) {
+        assert h != null;
         handler = h;
     }
 
