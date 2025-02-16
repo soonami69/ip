@@ -14,10 +14,11 @@ public class Response {
     private final Color color;
 
     /**
-     * A class that encapsulates a response from Clonky.
-     * @param text The text that Clonky has to say.
-     * @param mood Clonky's mood.
-     * @param color A color that the text book is to be displayed
+     * Constructs a {@code Response} object that encapsulates Clonky's reply.
+     *
+     * @param text  The message Clonky will display.
+     * @param mood  Clonky's mood, which may affect the response styling.
+     * @param color The color associated with the response, used for display purposes.
      */
     public Response(String text, Mood mood, Color color) {
         this.text = text;

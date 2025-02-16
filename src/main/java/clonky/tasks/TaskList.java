@@ -207,7 +207,7 @@ public class TaskList {
     }
 
     /**
-     * Load tasks from /clonky/tasks.txt.
+     * Loads tasks from /clonky/tasks.txt.
      * @return A Response that contains text that says if the loading has been successful
      *      or not.
      */
