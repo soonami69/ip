@@ -58,13 +58,13 @@ public class Parser {
      * @param arguments The index of the task to be removed.
      */
     public Response removeTask(String arguments) {
-        text = "";
-        int index = parseIndex(arguments);
-        if (index == -1) {
-            return new Response(text, Mood.SAD, Color.PINK);
+        Response errorResponse = parseIndexWithResponse(arguments);
+        if (errorResponse != null) {
+            return errorResponse;
         }
-        return taskList.removeTask(index);
+        return taskList.removeTask(parseIndex(arguments));
     }
+
 
     /**
      * Marks a task as done based on the given index.
@@ -72,12 +72,11 @@ public class Parser {
      * @param arguments The index of the task to mark as done.
      */
     public Response markTask(String arguments) {
-        text = "";
-        int index = parseIndex(arguments);
-        if (index == -1) {
-            return new Response(text, Mood.SAD, Color.RED);
+        Response errorResponse = parseIndexWithResponse(arguments);
+        if (errorResponse != null) {
+            return errorResponse;
         }
-        return taskList.markTask(index);
+        return taskList.markTask(parseIndex(arguments));
     }
 
     /**
@@ -86,12 +85,11 @@ public class Parser {
      * @param arguments The index of the task to unmark.
      */
     public Response unmarkTask(String arguments) {
-        text = "";
-        int index = parseIndex(arguments);
-        if (index == -1) {
-            return new Response(text, Mood.SAD, Color.RED);
+        Response errorResponse = parseIndexWithResponse(arguments);
+        if (errorResponse != null) {
+            return errorResponse;
         }
-        return taskList.unmarkTask(index);
+        return taskList.unmarkTask(parseIndex(arguments));
     }
 
     /**
@@ -100,6 +98,15 @@ public class Parser {
     public Response listTasks() {
         return taskList.listTasks();
     }
+
+    private Response parseIndexWithResponse(String argument) {
+        int index = parseIndex(argument);
+        if (index == -1) {
+            return new Response(text, Mood.SAD, Color.PINK);
+        }
+        return null; // Indicating a valid index
+    }
+
 
     private int parseIndex(String argument) {
         try {
@@ -127,8 +134,10 @@ public class Parser {
      * @return A Response whose list of tasks that match the description.
      */
     public Response find(String description) {
+        assert description != null;
+
         StringBuilder text = new StringBuilder();
-        String[] parts = description.split(" ", 2); // Split command and arguments
+        String[] parts = parseFindCommand(description);
         String command = parts[0];
         String arguments = parts.length > 1 ? parts[1] : "";
         switch (command) {
@@ -153,6 +162,11 @@ public class Parser {
                 new Color(245, 208, 51));
     }
 
+    private String[] parseFindCommand(String description) {
+        return description.split(" ", 2);
+    }
+
+
     /**
      * Loads tasks from a pre-determined filepath.
      * @return A Response indicating if the load has been successful or not.
@@ -172,6 +186,7 @@ public class Parser {
 
 
     public Response saveTasks(String arguments) {
+        assert arguments != null;
         return taskList.saveTasks(arguments);
     }
 }

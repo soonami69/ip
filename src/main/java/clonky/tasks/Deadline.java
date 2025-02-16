@@ -18,6 +18,8 @@ public class Deadline extends Task {
      */
     public Deadline(String description, String by) {
         super(description);
+
+        assert by != null;
         this.by = LocalDate.parse(by);
     }
 

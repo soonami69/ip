@@ -20,7 +20,11 @@ public class Event extends Task {
      */
     public Event(String description, String from, String to) {
         super(description);
+
+        assert from != null;
         this.from = LocalDate.parse(from);
+
+        assert to != null;
         this.to = LocalDate.parse(to);
     }
 
