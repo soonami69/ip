@@ -51,20 +51,12 @@ public class TaskList {
      * @throws NoByException         If the '/by' part is missing.
      */
     public Response addDeadline(String arguments) throws NoDescriptionException, NoByException {
-        String[] parts = arguments.split("/by", 2);
-        if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
-            if (parts[0].trim().isEmpty()) {
-                throw new NoDescriptionException("Deadline");
-            }
-            throw new NoByException();
-        }
+        String[] parts = validateDeadline(arguments);
         Deadline newDeadline = new Deadline(parts[0].trim(), parts[1].trim());
         tasks.add(newDeadline);
-        String text = String.format("New deadline \"%s\" has been successfully eaten.\n", newDeadline.description);
-        Mood mood = Mood.HAPPY;
-        Color color = new Color(255, 116, 108);
         saveTasks("");
-        return new Response(text, mood, color);
+        return new Response(String.format("New deadline \"%s\" has been successfully eaten.\n", newDeadline.description),
+                Mood.HAPPY, new Color(255, 116, 108));
     }
 
     /**
@@ -108,22 +100,7 @@ public class TaskList {
      * @param index The index of the task to mark as done.
      */
     public Response markTask(int index) {
-        String text = "";
-        Mood mood = Mood.HAPPY;
-        Color color = new Color(128, 239, 128);
-        if (index >= 0 && index < tasks.size()) {
-            if (tasks.get(index).isDone) {
-                text = "Task already complete!";
-                mood = Mood.SAD;
-                color = new Color(255, 105, 97);
-            } else {
-                tasks.get(index).markAsDone();
-                text = String.format("Task " + tasks.get(index).description
-                        + " successfully marked as done.");
-                saveTasks("");
-            }
-        }
-        return new Response(text, mood, color);
+        return toggleTaskCompletion(index, true);
     }
 
     /**
@@ -132,63 +109,68 @@ public class TaskList {
      * @param index The index of the task to unmark.
      */
     public Response unmarkTask(int index) {
-        String text = "";
-        Mood mood = Mood.HAPPY;
-        Color color = new Color(128, 239, 128);
-        if (index >= 0 && index < tasks.size()) {
-            if (!tasks.get(index).isDone) {
-                text = "Task already incomplete!";
-                mood = Mood.SAD;
-                color = new Color(255, 105, 97);
-            } else {
-                tasks.get(index).markAsUndone();
-                text = "Task " + tasks.get(index).description + " successfully unmarked.";
-                saveTasks("");
-            }
-        }
-        return new Response(text, mood, color);
+        return toggleTaskCompletion(index, false);
     }
+
+    private Response toggleTaskCompletion(int index, boolean mark) {
+        if (index < 0 || index >= tasks.size()) {
+            return new Response("Invalid task index!", Mood.SAD, new Color(255, 105, 97));
+        }
+
+        Task task = tasks.get(index);
+        if (task.isDone == mark) {
+            return new Response("Task already " + (mark ? "complete!" : "incomplete!"), Mood.SAD, new Color(255, 105, 97));
+        }
+
+        if (mark) task.markAsDone();
+        else task.markAsUndone();
+
+        saveTasks("");
+        return new Response("Task " + task.description + (mark ? " marked as done." : " unmarked."), Mood.HAPPY, new Color(128, 239, 128));
+    }
+
 
     /**
      * Lists all tasks in the task list.
      */
     public Response listTasks() {
-        StringBuilder text = new StringBuilder();
-        Mood mood = Mood.HAPPY;
-        String color = "";
         if (tasks.isEmpty()) {
-            text = new StringBuilder("Nothing in my stomach. Feed me!");
-            mood = Mood.ANGRY;
-            return new Response(text.toString(), mood, new Color(128, 239, 128));
+            return new Response("Nothing in my stomach. Feed me!", Mood.ANGRY, new Color(128, 239, 128));
         }
-        for (int i = 0; i < tasks.size(); i++) {
-            String taskString = (i + 1) + ". " + tasks.get(i) + "\n";
-            text.append(taskString);
-        }
-        return new Response(text.toString(), mood, new Color(179, 235, 242));
+        return new Response(formatTaskList(), Mood.HAPPY, new Color(179, 235, 242));
     }
+
+
+    private String formatTaskList() {
+        return tasks.stream()
+                .map(task -> (tasks.indexOf(task) + 1) + ". " + task)
+                .collect(Collectors.joining("\n"));
+    }
+
 
     /**
      * Removes a task from the task list based on its index.
      *
      * @param index The index of the task to be removed.
      */
-    public Response removeTask(int index) throws IndexOutOfBoundsException {
-        String text = "";
-        Mood mood;
-        if (index >= 0 && index < tasks.size()) {
-            Task removed = tasks.get(index);
-            tasks.remove(index);
-            text = "Task successfully removed.\n" + removed.toString();
-            mood = Mood.HAPPY;
+    public Response removeTask(int index) {
+        try {
+            Task removed = validateAndRemoveTask(index);
             saveTasks("");
-            return new Response(text, mood, new Color(128, 239, 128));
-        } else {
-            text = "Can't find task of " + index;
-            mood = Mood.ANGRY;
-            return new Response(text, mood, new Color(255, 116, 108));
+            return new Response("Task successfully removed:\n" + removed, Mood.HAPPY, new Color(128, 239, 128));
+        } catch (IndexOutOfBoundsException e) {
+            return new Response("Task not found: " + index, Mood.ANGRY, new Color(255, 116, 108));
         }
     }
+
+
+    private Task validateAndRemoveTask(int index) throws IndexOutOfBoundsException {
+        if (index < 0 || index >= tasks.size()) {
+            throw new IndexOutOfBoundsException("Invalid task index: " + index);
+        }
+        return tasks.remove(index);
+    }
+
 
     /**
      * Finds tasks in the list that match the given description.
@@ -263,6 +245,22 @@ public class TaskList {
             return new Response(text, mood, color);
         }
     }
+
+    private void validateDescription(String description, String taskType) throws NoDescriptionException {
+        if (description == null || description.trim().isEmpty()) {
+            throw new NoDescriptionException(taskType);
+        }
+    }
+
+    private String[] validateDeadline(String arguments) throws NoDescriptionException, NoByException {
+        String[] parts = arguments.split("/by", 2);
+        validateDescription(parts[0], "Deadline");
+        if (parts.length < 2 || parts[1].trim().isEmpty()) {
+            throw new NoByException();
+        }
+        return parts;
+    }
+
 
     public int getSize() {
         return tasks.size();
