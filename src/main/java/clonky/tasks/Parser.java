@@ -26,6 +26,7 @@ public class Parser {
      * @throws NoDescriptionException If the description is empty or null.
      */
     public Response addTodo(String description) throws NoDescriptionException {
+        assert description != null : "Description cannot be null!";
         return taskList.addTodo(description);
     }
 
@@ -37,6 +38,8 @@ public class Parser {
      * @throws NoByException If the due date is missing.
      */
     public Response addDeadline(String arguments) throws NoDescriptionException, NoByException {
+        assert arguments != null : "Arguments cannot be null!";
+        assert !arguments.trim().isEmpty() : "Arguments cannot be empty!";
         return taskList.addDeadline(arguments);
     }
 
@@ -49,6 +52,8 @@ public class Parser {
      * @throws NoToException         If the '/to' part is missing.
      */
     public Response addEvent(String arguments) throws NoDescriptionException, NoFromException, NoToException {
+        assert arguments != null : "Arguments cannot be null!";
+        assert !arguments.trim().isEmpty() : "Arguments cannot be empty!";
         return taskList.addEvent(arguments);
     }
 
@@ -58,6 +63,7 @@ public class Parser {
      * @param arguments The index of the task to be removed.
      */
     public Response removeTask(String arguments) {
+        assert arguments != null : "Arguments cannot be null!";
         text = "";
         int index = parseIndex(arguments);
         if (index == -1) {
@@ -72,6 +78,7 @@ public class Parser {
      * @param arguments The index of the task to mark as done.
      */
     public Response markTask(String arguments) {
+        assert arguments != null : "Arguments cannot be null!";
         text = "";
         int index = parseIndex(arguments);
         if (index == -1) {
@@ -86,6 +93,7 @@ public class Parser {
      * @param arguments The index of the task to unmark.
      */
     public Response unmarkTask(String arguments) {
+        assert arguments != null : "Arguments cannot be null!";
         text = "";
         int index = parseIndex(arguments);
         if (index == -1) {
@@ -98,18 +106,20 @@ public class Parser {
      * Displays all tasks in the list.
      */
     public Response listTasks() {
+        assert taskList != null : "TaskList should not be null!";
         return taskList.listTasks();
     }
 
     private int parseIndex(String argument) {
+        assert argument != null : "Argument cannot be null!";
         try {
             int index = Integer.parseInt(argument.trim()) - 1;
+            assert taskList != null : "TaskList should not be null!";
             if (index < 0 || index >= taskList.getSize()) {
                 if (taskList.getSize() == 1) {
                     text = "I'm only accepting the number 1 at the moment.\n";
                 } else {
-                    text = String.format("Please provide a number between 1 and %d!\n",
-                            taskList.getSize());
+                    text = String.format("Please provide a number between 1 and %d!\n", taskList.getSize());
                 }
                 return -1;
             }
@@ -127,32 +137,30 @@ public class Parser {
      * @return A Response whose list of tasks that match the description.
      */
     public Response find(String description) {
-        assert description != null;
+        assert description != null : "Description cannot be null!";
 
         StringBuilder text = new StringBuilder();
         String[] parts = description.split(" ", 2); // Split command and arguments
         String command = parts[0];
         String arguments = parts.length > 1 ? parts[1] : "";
+
         switch (command) {
-        case ("desc"):
+        case "desc":
             List<Task> tasks = taskList.findTasksByDescription(arguments);
-            text.append(String.format("There are %d tasks that contained %s\n", tasks.size(),
-                    arguments));
+            assert tasks != null : "Task list should not be null!";
+            text.append(String.format("There are %d tasks that contained %s\n", tasks.size(), arguments));
             for (int i = 0; i < tasks.size(); i++) {
-                text.append(String.format("%d. %s\n", i + 1,
-                        tasks.get(i).toString()));
+                text.append(String.format("%d. %s\n", i + 1, tasks.get(i).toString()));
             }
             text.append("Find what you need?\n");
             break;
-        case ("time"):
+        case "time":
             text.append("Yea, I wish I had time too...\n");
             break;
         default:
-            text.append("I don't quite understand that. Use "
-                    + "find desc {query} to search for tasks by description");
+            text.append("I don't quite understand that. Use find desc {query} to search for tasks by description");
         }
-        return new Response(text.toString(), Mood.HAPPY,
-                new Color(245, 208, 51));
+        return new Response(text.toString(), Mood.HAPPY, new Color(245, 208, 51));
     }
 
     /**
@@ -168,13 +176,18 @@ public class Parser {
      * @return A Response containing the welcome message
      */
     public Response welcome() {
-        return new Response("Welcome! I'm clonky... I think,"
-                + " and I'm here to help!", Mood.CHAOTIC, new Color(231, 210, 124));
+        return new Response("Welcome! I'm Clonky... I think, and I'm here to help!", Mood.CHAOTIC,
+                new Color(231, 210, 124));
     }
 
-
+    /**
+     * Saves tasks to a specified filepath.
+     * @param arguments The file path where tasks should be saved.
+     * @return A Response indicating success or failure.
+     */
     public Response saveTasks(String arguments) {
-        assert arguments != null;
+        assert arguments != null : "Arguments cannot be null!";
+        assert !arguments.trim().isEmpty() : "File path cannot be empty!";
         return taskList.saveTasks(arguments);
     }
 }
