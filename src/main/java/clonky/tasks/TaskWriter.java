@@ -201,7 +201,6 @@ class TaskWriter {
 
     /**
      * Parses an event task from a given line.
-     *
      * @param line The event task line from the file.
      * @return The parsed {@code Event} object.
      * @throws InvalidTaskFormatException If the format is invalid or missing required details.
