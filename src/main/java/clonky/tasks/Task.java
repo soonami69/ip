@@ -6,15 +6,18 @@ package clonky.tasks;
 public abstract class Task {
     protected String description;
     protected boolean isDone;
+    protected int priority;
 
     /**
      * Initializes a task with a particular description.
      * @param description The description for the task.
+     * @param priority The priority of the task.
      */
-    public Task(String description) {
+    public Task(String description, int priority) {
         assert description != null;
         this.description = description;
         this.isDone = false;
+        this.priority = priority;
     }
 
     public String getStatusIcon() {
@@ -31,6 +34,14 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return String.format("[%s] %s", this.getStatusIcon(), this.description);
+        return String.format("[%s] (Priority: %d) %s", this.getStatusIcon(), this.priority, this.description);
+    }
+
+    /**
+     * Sets the priority of the task.
+     * @param priority The new priority of the task.
+     */
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

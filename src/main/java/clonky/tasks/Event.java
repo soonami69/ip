@@ -18,8 +18,8 @@ public class Event extends Task {
      * @param from The start date of the event in {@code YYYY-MM-DD} format.
      * @param to The end date of the event in {@code YYYY-MM-DD} format.
      */
-    public Event(String description, String from, String to) {
-        super(description);
+    public Event(String description, String from, String to, int priority) {
+        super(description, priority);
 
         assert from != null;
         this.from = LocalDate.parse(from);

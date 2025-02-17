@@ -51,10 +51,32 @@ public class Parser {
      * @throws NoFromException       If the '/from' part is missing.
      * @throws NoToException         If the '/to' part is missing.
      */
-    public Response addEvent(String arguments) throws NoDescriptionException, NoFromException, NoToException {
+    public Response addEvent(String arguments) throws NoDescriptionException,
+            NoFromException, NoToException {
         assert arguments != null : "Arguments cannot be null!";
         assert !arguments.trim().isEmpty() : "Arguments cannot be empty!";
         return taskList.addEvent(arguments);
+    }
+
+    /**
+     * Updates the priority of a task.
+     *
+     * @param arguments The index of the task and new priority in the format "index priority".
+     * @return A Response indicating success or failure.
+     */
+    public Response setPriority(String arguments) {
+        assert arguments != null : "Arguments cannot be null!";
+        String[] parts = arguments.trim().split(" ");
+        if (parts.length != 2) {
+            return new Response("Please provide a valid index and priority!", Mood.SAD, Color.PINK);
+        }
+        try {
+            int index = Integer.parseInt(parts[0]) - 1;
+            int priority = Integer.parseInt(parts[1]);
+            return taskList.setPriority(index, priority);
+        } catch (NumberFormatException e) {
+            return new Response("Invalid number format!", Mood.SAD, Color.PINK);
+        }
     }
 
     /**
@@ -70,6 +92,14 @@ public class Parser {
             return new Response(text, Mood.SAD, Color.PINK);
         }
         return taskList.removeTask(index);
+    }
+
+    /**
+     * Displays all tasks in the list.
+     */
+    public Response listTasks() {
+        assert taskList != null : "TaskList should not be null!";
+        return taskList.listTasks();
     }
 
     /**
@@ -100,14 +130,6 @@ public class Parser {
             return new Response(text, Mood.SAD, Color.RED);
         }
         return taskList.unmarkTask(index);
-    }
-
-    /**
-     * Displays all tasks in the list.
-     */
-    public Response listTasks() {
-        assert taskList != null : "TaskList should not be null!";
-        return taskList.listTasks();
     }
 
     private int parseIndex(String argument) {

@@ -1,7 +1,7 @@
 package clonky.exceptions;
 
 /**
- * Exception that is throne when an {@link clonky.tasks.Event} is not supplied with a Date for its "from"
+ * Exception that is thrown when an {@link clonky.tasks.Event} is not supplied with a Date for its "from"
  * field.
  */
 public class NoFromException extends Exception {
