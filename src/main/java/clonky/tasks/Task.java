@@ -9,7 +9,7 @@ public abstract class Task {
     protected int priority;
 
     /**
-     * Initializes a task with a particular description.
+     * Initializes a task with a particular description and priority.
      * @param description The description for the task.
      * @param priority The priority of the task.
      */
