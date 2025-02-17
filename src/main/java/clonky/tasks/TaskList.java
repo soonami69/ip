@@ -54,7 +54,8 @@ public class TaskList {
             saveTasks("");
             return new Response(text, mood, color);
         } catch (NumberFormatException e) {
-            return new Response("Invalid priority! Please enter a number before the todo description.", Mood.ANGRY, Color.RED);
+            return new Response("Invalid priority! Please enter a number before the todo description.",
+                    Mood.ANGRY, Color.RED);
         }
     }
 
@@ -80,7 +81,8 @@ public class TaskList {
 
             // Extract description and deadline
             String[] descriptionParts = deadlineDetails.split("/by", 2);
-            if (descriptionParts.length < 2 || descriptionParts[0].trim().isEmpty() || descriptionParts[1].trim().isEmpty()) {
+            if (descriptionParts.length < 2 || descriptionParts[0].trim().isEmpty()
+                    || descriptionParts[1].trim().isEmpty()) {
                 if (descriptionParts[0].trim().isEmpty()) {
                     throw new NoDescriptionException("Deadline");
                 }
@@ -96,7 +98,8 @@ public class TaskList {
             saveTasks("");
             return new Response(text, mood, color);
         } catch (NumberFormatException e) {
-            return new Response("Invalid priority! Please enter a number before the deadline description.", Mood.ANGRY, Color.RED);
+            return new Response("Invalid priority! Please enter a number before the deadline"
+                    + " description.", Mood.ANGRY, Color.RED);
         }
     }
 
@@ -128,16 +131,19 @@ public class TaskList {
             saveTasks("");
             return new Response(text, mood, color);
         } catch (NumberFormatException e) {
-            return new Response("Invalid priority! Please enter a number before the event description.", Mood.ANGRY, Color.RED);
+            return new Response("Invalid priority! Please enter a number before the event description.",
+                    Mood.ANGRY, Color.RED);
         }
     }
 
-    private static Event getNewEvent(String[] parts, int priority) throws NoDescriptionException, NoFromException, NoToException {
+    private static Event getNewEvent(String[] parts, int priority) throws NoDescriptionException,
+            NoFromException, NoToException {
         String eventDetails = parts[1].trim();
 
         // Extract event description and timing
         String[] descriptionParts = eventDetails.split("/from", 2);
-        if (descriptionParts.length < 2 || descriptionParts[0].trim().isEmpty() || descriptionParts[1].trim().isEmpty()) {
+        if (descriptionParts.length < 2 || descriptionParts[0].trim().isEmpty()
+                || descriptionParts[1].trim().isEmpty()) {
             if (descriptionParts[0].trim().isEmpty()) {
                 throw new NoDescriptionException("Event");
             }
