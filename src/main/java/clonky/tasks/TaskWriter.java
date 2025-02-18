@@ -124,7 +124,8 @@ class TaskWriter {
         }
 
         // Extract the priority string between "(Priority: " and the closing parenthesis.
-        String priorityString = line.substring(priorityStartIndex + 11, priorityEndIndex).trim(); // +11 to skip "(Priority: "
+        String priorityString = line.substring(priorityStartIndex + 11,
+                priorityEndIndex).trim(); // +11 to skip "(Priority: "
 
         try {
             return Integer.parseInt(priorityString); // Parse the priority as an integer.
@@ -152,7 +153,8 @@ class TaskWriter {
         }
 
         // The description starts after the closing parenthesis and any following space
-        String description = line.substring(priorityEndIndex + 2).trim(); // Skip the space after the closing parenthesis
+        String description = line.substring(priorityEndIndex + 2)
+                .trim(); // Skip the space after the closing parenthesis
 
         Todo todo = new Todo(description, priority);
         if (isDone) {
@@ -238,7 +240,8 @@ class TaskWriter {
      * @return The {@code Event} object containing the extracted details.
      * @throws InvalidTaskFormatException If there is an error in extracting the event dates.
      */
-    private static Event getEvent(String line, int fromIndex, String description, int priority) throws InvalidTaskFormatException {
+    private static Event getEvent(String line, int fromIndex, String description,
+                                  int priority) throws InvalidTaskFormatException {
         int toIndex = line.indexOf("to", fromIndex);
         if (toIndex == -1) {
             throw new InvalidTaskFormatException("Missing 'to' in event task: " + line);

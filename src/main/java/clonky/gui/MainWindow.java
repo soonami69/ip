@@ -27,6 +27,14 @@ public class MainWindow extends AnchorPane {
 
     private Handler handler;
 
+    /**
+     * Initializes the controller by setting the main window for the dialog box and
+     * binding the vertical scroll position of the dialog container to the height of
+     * the scroll pane.
+     * <p>
+     * This method is called automatically when the controller is loaded, typically
+     * during the FXML loading process.
+     */
     @FXML
     public void initialize() {
         DialogBox.setMainWindow(this);
