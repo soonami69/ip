@@ -156,4 +156,10 @@ At any time, the current tasks can be manually saved with the `save` command:
 save
 ```
 
-***Clonky*** will update upon successful saving of the file.
+***Clonky*** will report if file saving is successful.
+
+## Closing ***Clonky***
+
+Close ***Clonky*** with the `bye` command.
+
+Example: `bye`
