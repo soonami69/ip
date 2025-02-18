@@ -59,27 +59,6 @@ public class Parser {
     }
 
     /**
-     * Updates the priority of a task.
-     *
-     * @param arguments The index of the task and new priority in the format "index priority".
-     * @return A Response indicating success or failure.
-     */
-    public Response setPriority(String arguments) {
-        assert arguments != null : "Arguments cannot be null!";
-        String[] parts = arguments.trim().split(" ");
-        if (parts.length != 2) {
-            return new Response("Please provide a valid index and priority!", Mood.SAD, Color.PINK);
-        }
-        try {
-            int index = Integer.parseInt(parts[0]) - 1;
-            int priority = Integer.parseInt(parts[1]);
-            return taskList.setPriority(index, priority);
-        } catch (NumberFormatException e) {
-            return new Response("Invalid number format!", Mood.SAD, Color.PINK);
-        }
-    }
-
-    /**
      * Removes a task based on the given index.
      *
      * @param arguments The index of the task to be removed.
@@ -138,6 +117,9 @@ public class Parser {
             int index = Integer.parseInt(argument.trim()) - 1;
             assert taskList != null : "TaskList should not be null!";
             if (index < 0 || index >= taskList.getSize()) {
+                if (taskList.getSize() == 0) {
+                    text = "No Tasks stored!! Add some!\n";
+                }
                 if (taskList.getSize() == 1) {
                     text = "I'm only accepting the number 1 at the moment.\n";
                 } else {
