@@ -4,7 +4,7 @@
 
  Here's ***Clonky*** in action!
 
-![Screenshot of Clonky in action](UI.png)
+![Screenshot of Clonky in action](Ui.png)
 
 What ***Clonky*** can do:
 
