@@ -149,7 +149,7 @@ Find what you need?
 
 After every operation, ***Clonky*** will save tasks to `clonky/tasks.txt`, and will automatically attempt to load from it on startup.
 
-If you would like ***Clonky*** to load a different set of tasks, you can replace the `clonky/tasks.txt` file. If it is not found or unabled to be read, ***Clonky*** will just initialize with no tasks.
+If you would like ***Clonky*** to load a different set of tasks, you can replace the `clonky/tasks.txt` file. If it is not found or unable to be read, ***Clonky*** will just initialize with no tasks.
 
 At any time, the current tasks can be manually saved with the `save` command:
 ```
